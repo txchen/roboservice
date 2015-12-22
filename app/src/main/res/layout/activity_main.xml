@@ -30,4 +30,20 @@
         android:id="@+id/btnStopService"
         android:layout_below="@+id/btnStartService"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set Alarm"
+        android:id="@+id/btnSetAlarm"
+        android:layout_below="@+id/btnStopService"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel Alarm"
+        android:id="@+id/btnCancelAlarm"
+        android:layout_below="@+id/btnSetAlarm"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

@@ -20,6 +20,7 @@ public class CountingService extends Service {
 
     private int mCurrentScore = 0;
     private final Handler myHandler = new Handler();
+    CountThread mCT;
 
     private final String TAG = "CS";
 
@@ -28,8 +29,8 @@ public class CountingService extends Service {
         super.onCreate();
         mCurrentScore = 0;
         Log.i(TAG, "onCreate CountingService");
-        CountThread ct = new CountThread();
-        ct.start();
+        mCT = new CountThread();
+        mCT.start();
     }
 
     private Notification buildNotification(String text) {
@@ -64,11 +65,17 @@ public class CountingService extends Service {
         @Override
         public void run() {
             super.run();
-            while(true) {
+            while (true) {
                 try {
                     sleep(3000);
+                    if (Thread.interrupted()) {
+                        throw new InterruptedException();
+                    }
                     mCurrentScore++;
                     myHandler.post(updateRunnable);
+                } catch (InterruptedException e) {
+                    Log.w(TAG, "Thread is ending itself");
+                    return;
                 } catch (Exception e) {
                     e.getMessage();
                 }
@@ -103,5 +110,10 @@ public class CountingService extends Service {
         super.onDestroy();
         Log.w(TAG, "onDestroy countingService");
         Toast.makeText(this, "CountingService is destroyed", Toast.LENGTH_SHORT).show();
+        if (mCT != null) {
+            Log.w(TAG, "kill the repeating thread");
+            mCT.interrupt();
+        }
+        stopSelf();
     }
 }
