@@ -49,5 +49,14 @@ public class MainActivity extends AppCompatActivity {
                 manager.cancel(sender);
             }
         });
+
+        final Button btnCrash = (Button) findViewById(R.id.btnCrash);
+        btnCrash.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, CountingService.class);
+                i.putExtra("crash", true);
+                startService(i);
+            }
+        });
     }
 }

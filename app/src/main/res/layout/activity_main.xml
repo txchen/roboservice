@@ -46,4 +46,12 @@
         android:id="@+id/btnCancelAlarm"
         android:layout_below="@+id/btnSetAlarm"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Crash It"
+        android:id="@+id/btnCrash"
+        android:layout_below="@+id/btnCancelAlarm"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

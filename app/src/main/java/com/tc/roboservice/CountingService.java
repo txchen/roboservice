@@ -57,6 +57,10 @@ public class CountingService extends Service {
         Toast.makeText(this, "CountingService is starting", Toast.LENGTH_SHORT).show();
         startForeground(101, buildNotification("My Text"));
 
+        if (intent.getBooleanExtra("crash", false)) {
+            int i = Integer.parseInt("aaa");
+        }
+
         // If we get killed, after returning from here, restart
         return START_STICKY;
     }
@@ -87,6 +91,7 @@ public class CountingService extends Service {
         public void run() {
             NotificationManager mNotificationManager =
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            Log.w(TAG, "Increase count to: " + Integer.toString(mCurrentScore));
             mNotificationManager.notify(101, buildNotification("Count: " + Integer.toString(mCurrentScore)));
         }
     };
