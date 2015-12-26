@@ -57,11 +57,25 @@ public class CountingService extends Service {
         Toast.makeText(this, "CountingService is starting", Toast.LENGTH_SHORT).show();
         startForeground(101, buildNotification("My Text"));
 
-        if (intent.getBooleanExtra("crash", false)) {
-            int i = Integer.parseInt("aaa");
+        if (intent != null && intent.getBooleanExtra("crash", false)) {
+            new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        Thread.sleep(3000);
+                        int i = Integer.parseInt("aaa");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
         }
 
-        // If we get killed, after returning from here, restart
+        // if return START_STICKY, system will restart this service by passing intent = null after the
+        //   service is killed or crashed
+        //   If kill process, service will always be restarted by system.
+        // if return START_REDELIVER_INTENT, system will restart this service by passing same intent after the
+        //   service is killed or crashed
+        // if the service is crashed, system will only restart the service once.
         return START_STICKY;
     }
 
