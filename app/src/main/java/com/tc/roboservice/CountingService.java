@@ -76,6 +76,8 @@ public class CountingService extends Service {
         // if return START_REDELIVER_INTENT, system will restart this service by passing same intent after the
         //   service is killed or crashed
         // if the service is crashed, system will only restart the service once.
+        // but if we handle the unhandledException and exit(1), system will not popup a crash dialog, and it
+        //   will always restart the service.
         return START_STICKY;
     }
 
