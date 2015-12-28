@@ -6,12 +6,12 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
-import android.provider.SyncStateContract;
+import android.preference.PreferenceManager;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -57,6 +57,11 @@ public class CountingService extends Service {
         Toast.makeText(this, "CountingService is starting", Toast.LENGTH_SHORT).show();
         startForeground(101, buildNotification("My Text"));
 
+        if (intent == null) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            mCurrentScore = preferences.getInt("Score", 0);
+        }
+
         if (intent != null && intent.getBooleanExtra("crash", false)) {
             new Thread(new Runnable() {
                 public void run() {
@@ -92,6 +97,7 @@ public class CountingService extends Service {
                         throw new InterruptedException();
                     }
                     mCurrentScore++;
+                    saveCurrentCount(mCurrentScore);
                     myHandler.post(updateRunnable);
                 } catch (InterruptedException e) {
                     Log.w(TAG, "Thread is ending itself");
@@ -101,6 +107,13 @@ public class CountingService extends Service {
                 }
             }
         }
+    }
+
+    private void saveCurrentCount(int currentCount) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("Score", currentCount);
+        editor.apply();
     }
 
     final Runnable updateRunnable = new Runnable() {
